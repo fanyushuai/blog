@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "cookie-parser": "^1.4.5",
+    "element-ui": "^2.13.2",
     "express-session": "^1.17.1",
     "mongoose": "^5.9.28",
     "pomelo-logger": "^0.1.7",
