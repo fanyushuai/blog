@@ -5,7 +5,7 @@
       <el-table-column label="修改时间" prop="updateTime"></el-table-column>
       <el-table-column align="right">
         <template slot="header">
-          <el-input placeholder="输入关键字搜索" clearable v-model="search" size="mini" @input="updateView($event)"/>
+          <el-input v-model="search" placeholder="输入关键字搜索" size="mini" @input="updateView($event)" @change="searchTitle($event)"/>
         </template>
         <template slot-scope="scope">
           <el-button size="mini" @click="edit(scope.$index, scope.row)">Edit</el-button>

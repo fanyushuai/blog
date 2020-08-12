@@ -7,6 +7,7 @@ const async = require('async');
 router.get('/list',function(req,res,next){
     var pageSize = req.query.pageSize*1||10; //分页参数
     var currentPage = req.query.currentPage*1||1; //当前页码
+    var title = req.query.title;
 
     var start = (currentPage - 1) * pageSize;
     var $page = {};
@@ -17,7 +18,7 @@ router.get('/list',function(req,res,next){
         });
       },
       records: function (done) { // 查询一页的记录
-        Article.find({}).skip(start).limit(pageSize).sort({"_id":1}).exec(function (err, doc) {
+        Article.find({title}).skip(start).limit(pageSize).sort({"_id":1}).exec(function (err, doc) {
           done(err, doc);
         });
       }
