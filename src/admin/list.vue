@@ -1,78 +1,71 @@
 <template>
-  <el-table :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"
-    style="width: 100%">
-    <el-table-column
-      label="标题"
-      prop="title">
-    </el-table-column>
-    <el-table-column
-      label="修改时间"
-      prop="updateTime">
-    </el-table-column>
-    <el-table-column
-      align="right">
-      <template slot="header" slot-scope="scope">
-        <el-input
-          v-model="search"
-          size="mini"
-          placeholder="输入关键字搜索"/>
-      </template>
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
-      </template>
-    </el-table-column>
-    <div class="block">
-      <span class="demonstration"></span>
-      <el-pagination
-        @size-change="handleSizeChange"   
-        @current-change="handleCurrentChange"
-        :current-page="limitePage.page"
-        :page-sizes="[2, 4]"
-        :page-size="limitePage.limit"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="tableData.length"
-      >
-      </el-pagination>
-    </div>
-  </el-table>
+  <div>
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column label="标题" prop="title"></el-table-column>
+      <el-table-column label="修改时间" prop="updateTime"></el-table-column>
+      <el-table-column align="right">
+        <template slot="header">
+          <el-input placeholder="输入关键字搜索" clearable v-model="search" size="mini" @input="updateView($event)"/>
+        </template>
+        <template slot-scope="scope">
+          <el-button size="mini" @click="edit(scope.$index, scope.row)">Edit</el-button>
+          <el-button size="mini" type="danger" @click="delete(scope.$index, scope.row)">Delete</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      background
+      @current-change="handleCurrentChange"
+      layout="prev, pager, next"
+      :total="total"
+    ></el-pagination>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      tableData:[],
-      search: '',
-      limitePage:{
-        limit:2,
-        page:1
-      }
+      tableData: [],
+      total: 0,
+      search: "",
+      pageSize: 10,
+      currentPage: 1,
     };
   },
-  mounted:function (){  
-    this.getArticleList();  
-  },  
-  methods:{ 
-    getArticleList(){  
-      this.$axios.get("http://localhost:9090/admin/list").then(response =>{  
-          this.tableData = response.data;  
-      })
+  mounted: function () {
+    this.getArticleList();
+  },
+  methods: {
+    getArticleList() {
+      this.$axios
+        .get(
+          "http://localhost:9090/admin/list?pageSize=" +
+            this.pageSize +
+            "&currentPage=" +
+            this.currentPage +
+            "&search=" +
+            this.search
+        )
+        .then((response) => {
+          this.tableData = response.data.data;
+          this.total = response.data.total;
+        });
     },
-    handleClick(row) {
-      console.log(row);
+    updateView(e){
+      this.$forceUpdate()
     },
-    handleSizeChange(val) {
-      this.limitePage.limit = val;
+    searchTitle(val) {
+      this.search = val;
+      this.getArticleList();
+    },
+    edit(){
+      alert(1)
     },
     handleCurrentChange(val) {
-      this.limitePage.page = val
-    }
-  }
-}
+      this.currentPage = val;
+      this.getArticleList();
+    },
+  },
+};
 </script>

@@ -7,7 +7,7 @@ import axios from 'axios'
 import elementUI from 'element-ui'
 import "element-ui/lib/theme-chalk/index.css"
 
-//axios.defaults.baseURL = '/api'
+axios.defaults.baseURL = '/api'
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false
 
