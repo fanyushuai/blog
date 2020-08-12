@@ -20,7 +20,7 @@ export default new Router({
           name: '联系人管理'
         },
         {
-          path: '/list',
+          path: '/artcle/list',
           name: '文章管理',
           component: list
         },

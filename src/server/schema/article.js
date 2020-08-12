@@ -7,4 +7,4 @@ const article = new Schema({
     cereteTime:{ type: Date}, //创建日期
     updateTime: {type:Date}//修改日期
 });
-module.exports = mongoose.model('Article',article);
+module.exports = mongoose.model('Article',article,'article');

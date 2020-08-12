@@ -9,6 +9,16 @@ router.get('/list',function(req,res,next){
     var currentPage = req.query.currentPage*1||1; //当前页码
     var title = req.query.title;
 
+    var _filter = {};
+    if(title){
+      _filter = {
+        $or: [  // 多字段同时匹配
+          {cn: {$regex: title}},
+          {key: {$regex: title, $options: '$i'}}, //  $options: '$i' 忽略大小写
+          {en: {$regex: title, $options: '$i'}}
+        ]
+      }
+    }
     var start = (currentPage - 1) * pageSize;
     var $page = {};
     async.parallel({
@@ -18,7 +28,7 @@ router.get('/list',function(req,res,next){
         });
       },
       records: function (done) { // 查询一页的记录
-        Article.find({title}).skip(start).limit(pageSize).sort({"_id":1}).exec(function (err, doc) {
+        Article.find(_filter).skip(start).limit(pageSize).sort({"_id":1}).exec(function (err, doc) {
           done(err, doc);
         });
       }
@@ -28,6 +38,30 @@ router.get('/list',function(req,res,next){
       $page.data = results.records;
       res.send($page);
     });
+
+  router.get('/save',function(req,res,next){
+    var title = req.query.title;
+    var content = req.query.content;
+
+    var articleData = new Article({
+      "title":title,
+      "content":content,
+      "createUser":"fys",
+      "createTime":new Date(),
+      "updateTime":new Date()
+    });
+
+    articleData.save(function(err,data){
+      res.send(data);
+    });
+  })
+
+  router.get('/deleteOne',function(req,res,next){
+    var id = req.query.id;
+    Article.deleteOne({"_id":id},function(err,data){
+      res.send(data);
+    });
+  })
 
     // let params = {
     //     //条件查询参数
