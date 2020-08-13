@@ -2,31 +2,33 @@
   <div>
     <el-table :data="tableData" style="width: 100%">
       <el-table-column label="标题" prop="title"></el-table-column>
-      <el-table-column label="修改时间" prop="updateTime"></el-table-column>
+      <el-table-column label="修改时间" prop="updateTime"><template slot-scope="scope">{{scope.row.updateTime|datrfmt()}}</template></el-table-column>
+      <!--<el-table-column label="内容" prop="content"></el-table-column>-->
       <el-table-column align="right">
         <template slot="header">
           <el-input
-            v-model="search"
+            v-model="title"
             placeholder="输入关键字搜索"
             size="mini"
             @input="updateView($event)"
             @change="searchTitle($event)"
           />
-          <el-button size="mini" @click="edit()">Edit</el-button>
+          <el-button size="mini" @click="edit()">新增</el-button>
         </template>
         <template slot-scope="scope">
-          <el-button size="mini" @click="edit(scope.$index, scope.row)">Edit</el-button>
+          <el-button size="mini" @click="edit(scope.$index, scope.row)">修改</el-button>
           <el-popover
-          placement="top"
-          title="确认删除吗？"
-          width="200"
-          trigger="click"
-          v-model="scope.row.visible">
+            placement="top"
+            title="确认删除吗？"
+            width="200"
+            trigger="click"
+            v-model="scope.row.visible"
+          >
             <div style="text-align: right; margin: 0">
-                <el-button size="mini" type="text" @click="scope.row.visible = false;">取消</el-button>
-                <el-button type="primary" size="mini" @click="deleteOne(scope.$index, scope.row)">确定</el-button>
+              <el-button size="mini" type="text" @click="scope.row.visible = false;">取消</el-button>
+              <el-button type="primary" size="mini" @click="deleteOne(scope.$index, scope.row)">确定</el-button>
             </div>
-            <el-button size="mini" type="danger" slot="reference">Delete</el-button>
+            <el-button size="mini" type="danger" slot="reference">删除</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -37,10 +39,21 @@
       layout="prev, pager, next"
       :total="total"
     ></el-pagination>
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+    <el-dialog title="新增/编辑" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
       <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="活动名称">
+        <el-input v-model="form._id" type="hidden"></el-input>
+        <el-form-item label="标题">
           <el-input v-model="form.title"></el-input>
+        </el-form-item>
+        <el-form-item label="内容">
+          <el-card style="height: 610px;">
+            <quill-editor
+              v-model="form.content"
+              ref="myQuillEditor"
+              style="height: 500px;"
+              :options="editorOption"
+            ></quill-editor>
+          </el-card>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -48,27 +61,34 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <template></template>
-  </div>
-</template>
   </div>
 </template>
 
 <script>
+import { quillEditor } from "vue-quill-editor";
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
 export default {
+  name: "FuncFormsEdit",
+  components: {
+    quillEditor,
+  },
   data() {
     return {
       tableData: [],
       total: 0,
       search: "",
       title: "",
-      pageSize: 10,
-      currentPage: 1,
       dialogVisible: false,
       form: {
+        _id: "",
         title: "",
         content: "",
+        pageSize: 10,
+        currentPage: 1,
       },
+      editorOption: {},
     };
   },
   mounted: function () {
@@ -76,17 +96,9 @@ export default {
   },
   methods: {
     getArticleList() {
-      this.$axios
-        .get(
-          "http://localhost:9090/admin/list?pageSize=" +
-            this.pageSize +
-            "&currentPage=" +
-            this.currentPage +
-            "&title=" +
-            this.title
-        )
+      this.$axios.post( "http://localhost:9090/admin/list",this.form)
         .then((response) => {
-          this.tableData = response.data.data;
+          this.tableData = response.data;
           this.total = response.data.total;
         });
     },
@@ -99,16 +111,18 @@ export default {
     },
     onSubmit() {
       this.$axios
-        .get("http://localhost:9090/admin/save?title=" + this.form.title)
+        .post(
+          "http://localhost:9090/admin/save",this.form
+        )
         .then((response) => {
-          if(response.data._id){
+          if (response._id) {
             this.dialogVisible = false;
           }
           this.getArticleList();
         });
     },
     handleCurrentChange(val) {
-      this.currentPage = val;
+      this.form.currentPage = val;
       this.getArticleList();
     },
     handleClose(done) {
@@ -120,21 +134,28 @@ export default {
     },
     edit(index, row) {
       this.dialogVisible = true;
+      if(row){
+        //this.form = row;
+
+      }
     },
     deleteOne(index, row) {
       this.$axios
-        .get("http://localhost:9090/admin/deleteOne?id=" + row._id)
+        .post("http://localhost:9090/admin/deleteOne",{"id":row._id})
         .then((response) => {
-          if(response.data.deletedCount == 1){
+          if (response.deletedCount == 1) {
             this.$notify({
-              title: '通知',
-              message: '删除成功',
-              position: 'bottom-right'
+              title: "通知",
+              message: "删除成功",
+              position: "bottom-right",
             });
           }
           this.getArticleList();
         });
     },
-  },
+    findOne(){
+      
+    }
+  }
 };
 </script>
