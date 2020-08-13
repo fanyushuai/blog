@@ -15,11 +15,6 @@ export default new Router({
       iconCls: 'fa fa-address-card',
       children: [
         {
-          path: '/system/contract',
-          component: Contract,
-          name: '联系人管理'
-        },
-        {
           path: '/artcle/list',
           name: '文章管理',
           component: list

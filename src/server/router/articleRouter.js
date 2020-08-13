@@ -9,42 +9,23 @@ const async = require('async');
 router.post('/list', function (req, res) {
   var pageSize = req.body.pageSize * 1 || 10; //分页参数
   var currentPage = req.body.currentPage * 1 || 1; //当前页码
-  var title = req.body.title;
+  var title = req.body.titleSearch;
 
-  var _filter = {};
+  var _filter =new RegExp(title);
+  var query = {};
   if (title) {
-    _filter = {
-      $or: [ // 多字段同时匹配
-        {
-          cn: {
-            $regex: title
-          }
-        },
-        {
-          key: {
-            $regex: title,
-            $options: '$i'
-          }
-        }, //  $options: '$i' 忽略大小写
-        {
-          en: {
-            $regex: title,
-            $options: '$i'
-          }
-        }
-      ]
-    }
+    query = {"title":_filter};
   }
   var start = (currentPage - 1) * pageSize;
   var $page = {};
   async.parallel({
     count: function (done) { // 查询数量
-      Article.count(null).exec(function (err, count) {
+      Article.count(query).exec(function (err, count) {
         done(err, count);
       });
     },
     records: function (done) { // 查询一页的记录
-      Article.find(_filter).skip(start).limit(pageSize).sort({
+      Article.find(query).skip(start).limit(pageSize).sort({
         "_id": 1
       }).exec(function (err, doc) {
         done(err, doc);
@@ -64,7 +45,7 @@ router.post('/list', function (req, res) {
 router.post('/save', function (req, res) {
   var title = req.body.title;
   var content = req.body.content;
-  var id = req.body.id;
+  var id = req.body._id;
 
   var articleData = new Article({
     "title": title,
@@ -96,7 +77,7 @@ router.post("/findOne",function(req,res){
   Article.findById({
     "_id": id
   }, function (err, data) {
-    res.send(data);
+    res.send(data._doc);
   });
 })
 

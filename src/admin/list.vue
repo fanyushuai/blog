@@ -6,12 +6,10 @@
       <!--<el-table-column label="内容" prop="content"></el-table-column>-->
       <el-table-column align="right">
         <template slot="header">
-          <el-input
-            v-model="title"
-            placeholder="输入关键字搜索"
+          <input class="el-input__inner"
+            type="text" v-model.trim="form.titleSearch"
             size="mini"
-            @input="updateView($event)"
-            @change="searchTitle($event)"
+            @blur="searchTitle($event)"
           />
           <el-button size="mini" @click="edit()">新增</el-button>
         </template>
@@ -78,8 +76,6 @@ export default {
     return {
       tableData: [],
       total: 0,
-      search: "",
-      title: "",
       dialogVisible: false,
       form: {
         _id: "",
@@ -87,6 +83,7 @@ export default {
         content: "",
         pageSize: 10,
         currentPage: 1,
+        titleSearch:""
       },
       editorOption: {},
     };
@@ -95,18 +92,20 @@ export default {
     this.getArticleList();
   },
   methods: {
+    //列表查询
     getArticleList() {
       this.$axios.post( "http://localhost:9090/admin/list",this.form)
         .then((response) => {
           this.tableData = response.data;
-          this.total = response.data.total;
+          this.total = response.total;
         });
     },
     updateView(e) {
       this.$forceUpdate();
+      this.form.searchTitle = e;
     },
-    searchTitle(val) {
-      this.title = val;
+    searchTitle(e) {
+      this.form.titleSearch = e.target.value;
       this.getArticleList();
     },
     onSubmit() {
@@ -132,11 +131,25 @@ export default {
         })
         .catch((_) => {});
     },
+    async findOne(row){
+      this.$axios
+        .post("http://localhost:9090/admin/findOne",{"id":row._id})
+        .then((response) => {
+          if (response) {
+            return response;
+          }
+        });
+    },
     edit(index, row) {
       this.dialogVisible = true;
       if(row){
-        //this.form = row;
-
+        this.$axios
+        .post("http://localhost:9090/admin/findOne",{"id":row._id})
+        .then((response) => {
+          if (response) {
+            this.form = response;
+          }
+        });
       }
     },
     deleteOne(index, row) {
@@ -152,9 +165,6 @@ export default {
           }
           this.getArticleList();
         });
-    },
-    findOne(){
-      
     }
   }
 };
