@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import list from '@/admin/list.vue'
 import Main from '@/components/Main'
-import Contract from '@/components/system/Contract'
 
 Vue.use(Router)
 
