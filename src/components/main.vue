@@ -12,20 +12,14 @@
                 </div>
             </el-col>
             <el-col :span="10" class="userinfo">
-                <el-dropdown trigger="hover">
+                <el-dropdown trigger="hover" @command="handleCommand">
                     <span class="el-dropdown-link userinfo-inner">
-                        你好：管理员
+                        你好：
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>
-                            <a href="#/">首页</a>
-                        </el-dropdown-item>
-                        <el-dropdown-item>
-                            <a @click="">修改密码</a>
-                        </el-dropdown-item>
-                        <el-dropdown-item @click.native="">
-                            注销登录
-                        </el-dropdown-item>
+                        <el-dropdown-item command="home">首页</el-dropdown-item>
+                        <el-dropdown-item command="updatePwd">修改密码</el-dropdown-item>
+                        <el-dropdown-item command="logout">注销登录</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-col>
@@ -100,7 +94,7 @@
             sysName: '后台管理系统',
             menuData: [],
             collapsed: false,
-            sysUserName: '管理员',
+            username:""
         }
     }
 
@@ -134,10 +128,20 @@
             },
             showMenu: function(i, status) {
                 this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-' + i)[0].style.display = status ? 'block' : 'none';
+            },
+            handleCommand(command) {
+                switch(command){
+                    case "logout":
+                        this.isLogin=false;
+                        this.$store.commit("saveToken", "");//清掉 token
+                        this.$router.push({path:"/"});
+                }
             }
         },
         mounted: function() {
-            this.initMenu()
+            this.initMenu();
+            this.username = this.$route.query.username;
+            console.log(this.username);
         }
     }
 </script>

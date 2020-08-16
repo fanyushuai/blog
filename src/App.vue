@@ -49,9 +49,10 @@ body {
   background: #f2f2f2;
   padding: 10px;
   margin: 10px 0;
-  .el-form-item {
-    margin-bottom: 10px;
-  }
+}
+
+.el-form-item {
+  margin-bottom: 10px;
 }
 
 .fade-enter-active,

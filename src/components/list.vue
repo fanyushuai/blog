@@ -94,7 +94,7 @@ export default {
   methods: {
     //列表查询
     getArticleList() {
-      this.$axios.post( "http://localhost:9090/admin/list",this.form)
+      this.$axios.post( "http://localhost:9090/admin/article/list",this.form)
         .then((response) => {
           this.tableData = response.data;
           this.total = response.total;
@@ -111,7 +111,7 @@ export default {
     onSubmit() {
       this.$axios
         .post(
-          "http://localhost:9090/admin/save",this.form
+          "http://localhost:9090/admin/article/save",this.form
         )
         .then((response) => {
           if (response._id) {
@@ -133,7 +133,7 @@ export default {
     },
     async findOne(row){
       this.$axios
-        .post("http://localhost:9090/admin/findOne",{"id":row._id})
+        .post("http://localhost:9090/admin/article/findOne",{"id":row._id})
         .then((response) => {
           if (response) {
             return response;
@@ -144,17 +144,19 @@ export default {
       this.dialogVisible = true;
       if(row){
         this.$axios
-        .post("http://localhost:9090/admin/findOne",{"id":row._id})
+        .post("http://localhost:9090/admin/article/findOne",{"id":row._id})
         .then((response) => {
           if (response) {
             this.form = response;
           }
         });
+      }else{
+        this.form = {};
       }
     },
     deleteOne(index, row) {
       this.$axios
-        .post("http://localhost:9090/admin/deleteOne",{"id":row._id})
+        .post("http://localhost:9090/admin/article/deleteOne",{"id":row._id})
         .then((response) => {
           if (response.deletedCount == 1) {
             this.$notify({

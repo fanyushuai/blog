@@ -24,7 +24,7 @@ let config = {
 }
 
 httpserver.interceptors.request.use(config => {
-  config.headers.token = localStorage.loginToken;
+  config.headers.token = localStorage.token;
 
   // 请求默认20s
   if (!config.timeout) {
@@ -52,7 +52,6 @@ httpserver.interceptors.response.use(response => {
   if (ajaxParams[response.config.url] && !ajaxParams[response.config.url].noLoading) {
     store.commit('CLEAN_LOADING'); //满足条件 vuex里面状态-1
   }
-
   return response.data
 }, function (error) {
   // 都有接口报错了 不管之前有没有加1，直接减1，这样子能保证接口报错后loading消失；
