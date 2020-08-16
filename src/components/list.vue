@@ -4,7 +4,7 @@
       <el-table-column label="标题" prop="title"></el-table-column>
       <el-table-column label="修改时间" prop="updateTime"><template slot-scope="scope">{{scope.row.updateTime|datrfmt()}}</template></el-table-column>
       <!--<el-table-column label="内容" prop="content"></el-table-column>-->
-      <el-table-column align="right">
+      <el-table-column align="left">
         <template slot="header">
           <input class="el-input__inner"
             type="text" v-model.trim="form.titleSearch"

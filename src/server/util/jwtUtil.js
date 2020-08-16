@@ -2,7 +2,7 @@ let jwt = require('jwt-simple');
 //秘钥
 let secret = "123456";
 let time = 10;
-let tokenExpiresTime = 1000 * 60 * 60 * 24 * 7; //token过期时间,毫秒为单位， 7天
+let tokenExpiresTime = 1000 * 60 * 30; //token过期时间,毫秒为单位
 module.exports = {
     /*
      *检验token合法性
