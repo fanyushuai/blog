@@ -24,6 +24,11 @@ let config = {
 }
 
 httpserver.interceptors.request.use(config => {
+
+  if(!localStorage.token && config.url.indexOf("login") == -1){
+    location.href="/";
+  }
+
   config.headers.token = localStorage.token;
 
   // 请求默认20s
