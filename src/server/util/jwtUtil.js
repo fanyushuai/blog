@@ -12,26 +12,37 @@ module.exports = {
             let decodeToken = null;
             try {
                 //防止假冒token解析報錯 
-                // decodeToken = jwt.decode(token,secret,'HS256'); 
                 decodeToken = jwt.decode(token, secret); //解密
             } catch (err) {
-                res.status(401).send("非法访问");
+                res.send({
+                    code: '401',
+                    "errorMsg": "非法访问"
+                });
                 return;
             }
             let exp = decodeToken.exp;
             if (!exp) {
-                res.status(401).send("非法访问");
+                res.send({
+                    code: '401',
+                    "errorMsg": "非法访问"
+                });
+                return;
             }
             // time*60*1000   = > 10分钟
             if (exp < (Date.now() + time * 60 * 1000)) {
                 res.send({
-                    code: '002',
+                    code: '401',
                     "errorMsg": "授权超时"
-                })
+                });
+                return;
             }
             next();
         } else {
-            res.status(401).send("非法访问");
+            res.send({
+                code: '401',
+                "errorMsg": "非法访问"
+            });
+            return;
         }
     },
     /* 生成token*/

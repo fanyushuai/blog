@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import list from '@/components/list.vue'
-import Main from '@/components/Main'
-import login from "@/components/login"
+import list from '@/components/admin/artcle'
+import main from '@/components/admin/main'
+import login from "@/components/admin/login"
 
 Vue.use(Router)
 
@@ -18,7 +18,7 @@ const router = new Router({
     {
       path: '/admin',
       name: '系统中心',
-      component: Main,
+      component: main,
       iconCls: 'fa fa-address-card',
       meta: {
         requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
@@ -36,7 +36,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched[0].meta.requireAuth) {  // 判断该路由是否需要登录权限
-    if (window.localStorage.token && window.localStorage.token.length >= 128) {  // 通过vuex state获取当前的token是否存在
+    if (window.sessionStorage.token && window.sessionStorage.token.length >= 128) {  // 通过vuex state获取当前的token是否存在
       next();
     }
     else {

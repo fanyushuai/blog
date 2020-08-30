@@ -33,9 +33,9 @@ export default {
                 if(!response.success){
                     this.$message.error(response.message);
                 }else{
-                    this.$store.commit("saveToken","");
                     this.$store.commit("saveToken", response.token);//保存 token
-                    this.$router.push({"path":"admin","query":{"username":response.username}});
+                    this.$store.commit("login", response.user);//保存 用户
+                    this.$router.push({"path":"admin"});
                 }
             });
         },

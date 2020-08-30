@@ -7,8 +7,8 @@ var logger = require('pomelo-logger').getLogger('mongodb-log');
 
 var options = {
   db_user: "blog",
-  db_pwd: "123456",
-  db_host: "localhost",
+  db_pwd: "123456",//blog 123456
+  db_host: "localhost",//45.8.158.227 localhost
   db_port: 27017,
   db_name: "blog"
 };

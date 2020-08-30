@@ -6,7 +6,7 @@
       <!--<el-table-column label="内容" prop="content"></el-table-column>-->
       <el-table-column align="left">
         <template slot="header">
-          <input class="el-input__inner"
+          <input class="el-input__inner" style="width:auto;"
             type="text" v-model.trim="form.titleSearch"
             size="mini"
             @blur="searchTitle($event)"
@@ -40,8 +40,12 @@
     <el-dialog title="新增/编辑" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
       <el-form ref="form" :model="form" label-width="80px">
         <el-input v-model="form._id" type="hidden"></el-input>
+        <el-input v-model="form.createUser" type="hidden"></el-input>
         <el-form-item label="标题">
           <el-input v-model="form.title"></el-input>
+        </el-form-item>
+        <el-form-item label="分类">
+          <el-input v-model="form.category"></el-input>
         </el-form-item>
         <el-form-item label="内容">
           <el-card style="height: 610px;">
@@ -81,12 +85,14 @@ export default {
         _id: "",
         title: "",
         content: "",
+        category:"",
+        createUser:"",
         pageSize: 10,
         currentPage: 1,
         titleSearch:""
       },
       editorOption: {},
-    };
+    }
   },
   mounted: function () {
     this.getArticleList();

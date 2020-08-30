@@ -45,14 +45,18 @@ router.post('/list', function (req, res) {
 router.post('/save', function (req, res) {
   var title = req.body.title;
   var content = req.body.content;
+  var category = req.body.category;
+  var createUser = req.body.createUser;
   var id = req.body._id;
+  var updateTime = new Date();
 
   var articleData = new Article({
     "title": title,
+    "category":category,
     "content": content,
-    "createUser": "fys",
+    "createUser": createUser,
     "createTime": new Date(),
-    "updateTime": new Date()
+    "updateTime": updateTime
   });
 
   if (!id) {
@@ -60,7 +64,7 @@ router.post('/save', function (req, res) {
       res.send(data);
     });
   } else {
-    Article.findByIdAndUpdate(id, {"title":title,"content":content}, function (err, data) {
+    Article.findByIdAndUpdate(id, {"title":title,"content":content,"category":category,"updateTime":updateTime}, function (err, data) {
       if(err){
         console.error(err);
       }

@@ -25,11 +25,11 @@ let config = {
 
 httpserver.interceptors.request.use(config => {
 
-  if(!localStorage.token && config.url.indexOf("login") == -1){
+  if(!sessionStorage.token && config.url.indexOf("login") == -1){
     location.href="/";
   }
 
-  config.headers.token = localStorage.token;
+  config.headers.token = sessionStorage.token;
 
   // 请求默认20s
   if (!config.timeout) {
@@ -56,6 +56,11 @@ httpserver.interceptors.response.use(response => {
 
   if (ajaxParams[response.config.url] && !ajaxParams[response.config.url].noLoading) {
     store.commit('CLEAN_LOADING'); //满足条件 vuex里面状态-1
+  }
+
+  //服务端 token 失效
+  if("401" == response.data.code){
+    location.href="/";
   }
   return response.data
 }, function (error) {

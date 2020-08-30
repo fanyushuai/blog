@@ -14,7 +14,7 @@
             <el-col :span="10" class="userinfo">
                 <el-dropdown trigger="hover" @command="handleCommand">
                     <span class="el-dropdown-link userinfo-inner">
-                        你好：
+                        你好：{{this.$store.state.user.username}}
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="home">首页</el-dropdown-item>
@@ -140,8 +140,6 @@
         },
         mounted: function() {
             this.initMenu();
-            this.username = this.$route.query.username;
-            console.log(this.username);
         }
     }
 </script>
