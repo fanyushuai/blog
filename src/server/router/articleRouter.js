@@ -46,7 +46,7 @@ router.post('/save', function (req, res) {
   var title = req.body.title;
   var content = req.body.content;
   var category = req.body.category;
-  var createUser = req.body.createUser;
+  var createUser = req.session.user._id;
   var id = req.body._id;
   var updateTime = new Date();
 

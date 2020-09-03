@@ -7,9 +7,6 @@ import {
 import "element-ui/lib/theme-chalk/index.css"
 import store from "./store"
 
-// 创建实例
-const httpserver = axios.create(config);
-
 //存放noLoading(部分接口不希望展示loading)，避免被覆盖
 const ajaxParams = {};
 
@@ -20,8 +17,12 @@ let config = {
   // 请求超时时间
   timeout: 10000,
   // 每次请求携带cookie
-  withCredentials: true
+  withCredentials: true,
+  crossDomain: true
 }
+
+// 创建实例
+const httpserver = axios.create(config);
 
 httpserver.interceptors.request.use(config => {
 

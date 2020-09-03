@@ -1,8 +1,19 @@
 const express = require('express');
+const cookieParser = require("cookie-parser")
 const bodyParser = require('body-parser');
+const expressSession = require("express-session")
 const app = express();
 const cors = require('cors');
 const jwt = require("./util/jwtUtil")
+
+//使用session
+app.use(cookieParser());true
+app.use(expressSession({
+    secret:"6666666",
+    cookie:{maxAge:1000*60*30},
+    resave:true,//是否强制保存session
+    saveUninitialized:true//强制没有“初始化”的session保存到storage中
+}));
 
 // 使用 body-parser 中间
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -12,7 +23,9 @@ app.use(bodyParser.json());
 app.use(cors({
     origin: ['http://localhost:8080'],  //指定接收的地址
     methods: ['GET', 'POST', 'options'],  //指定接收的请求类型
-    alloweHeaders: ['Content-Type']  //指定header
+    alloweHeaders: ['Content-Type',"Access-Control-Allow-Credentials:true"],  //指定header
+    credentials:true,
+    optionsSuccessStatus: 200 
 }));
 
 //验证token
