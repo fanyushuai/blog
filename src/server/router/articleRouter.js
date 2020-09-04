@@ -20,12 +20,12 @@ router.post('/list', function (req, res) {
   var $page = {};
   async.parallel({
     count: function (done) { // 查询数量
-      Article.count(query).exec(function (err, count) {
+      Article.countDocuments(query).exec(function (err, count) {
         done(err, count);
       });
     },
     records: function (done) { // 查询一页的记录
-      Article.find(query).skip(start).limit(pageSize).sort({
+      Article.find(query,{id:1,title:1,updateTime:1}).skip(start).limit(pageSize).sort({
         "_id": 1
       }).exec(function (err, doc) {
         done(err, doc);
@@ -78,12 +78,10 @@ router.post('/save', function (req, res) {
  */
 router.post("/findOne",function(req,res){
   var id = req.body.id
-  Article.findById({
-    "_id": id
-  }, function (err, data) {
+  Article.findById({"_id": id}, function (err, data) {
     res.send(data._doc);
-  });
-})
+  }).populate({path: 'createUser', select: { username: 1 }, options: {sort: { username: -1 }}});
+});
 
 
 /**
@@ -96,5 +94,5 @@ router.post('/deleteOne', function (req, res) {
   }, function (err, data) {
     res.send(data);
   });
-})
+});
 module.exports = router

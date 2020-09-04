@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import list from '@/components/admin/artcle'
 import main from '@/components/admin/main'
 import login from "@/components/admin/login"
+import artcle from "@/components/artcle/artcle"
 
 Vue.use(Router)
 
@@ -30,12 +31,16 @@ const router = new Router({
           component: list
         },
       ]
+    },{
+      path:"/artcle/:id",
+      name:"",
+      component:artcle
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.matched[0].meta.requireAuth) {  // 判断该路由是否需要登录权限
+  if (to.matched.length >1 && to.matched[0].meta.requireAuth) {  // 判断该路由是否需要登录权限
     if (window.sessionStorage.token && window.sessionStorage.token.length >= 128) {  // 通过vuex state获取当前的token是否存在
       next();
     }

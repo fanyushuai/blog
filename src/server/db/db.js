@@ -15,9 +15,12 @@ var options = {
 
 var dbURL = "mongodb://" + options.db_user + ":" + options.db_pwd + "@" + options.db_host + ":" + options.db_port + "/" + options.db_name;
 mongoose.Promise = global.Promise;
+mongoose.set('useFindAndModify', false);
 mongoose.connect(dbURL, {
   connectTimeoutMS: 1000,
-  promiseLibrary: require('bluebird')
+  promiseLibrary: require('bluebird'),
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
 
 mongoose.connection.on('connected', function (err) {

@@ -26,9 +26,9 @@ const httpserver = axios.create(config);
 
 httpserver.interceptors.request.use(config => {
 
-  if(!sessionStorage.token && config.url.indexOf("login") == -1){
-    location.href="/";
-  }
+  // if(!sessionStorage.token && config.url.indexOf("login") == -1){
+  //   location.href="/";
+  // }
 
   config.headers.token = sessionStorage.token;
 

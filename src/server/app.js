@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require("express");
 const cookieParser = require("cookie-parser")
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const expressSession = require("express-session")
 const app = express();
-const cors = require('cors');
+const cors = require("cors");
 const jwt = require("./util/jwtUtil")
 
 //使用session
@@ -15,15 +15,15 @@ app.use(expressSession({
     saveUninitialized:true//强制没有“初始化”的session保存到storage中
 }));
 
-// 使用 body-parser 中间
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// 使用 body-parser 中间 上传文件最大50mb
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true}));
 
 //解决跨域
 app.use(cors({
-    origin: ['http://localhost:8080'],  //指定接收的地址
-    methods: ['GET', 'POST', 'options'],  //指定接收的请求类型
-    alloweHeaders: ['Content-Type',"Access-Control-Allow-Credentials:true"],  //指定header
+    origin: ["http://localhost:8080"],  //指定接收的地址
+    methods: ["GET", "POST", "options"],  //指定接收的请求类型
+    alloweHeaders: ["Content-Type","Access-Control-Allow-Credentials:true"],  //指定header
     credentials:true,
     optionsSuccessStatus: 200 
 }));
@@ -32,7 +32,7 @@ app.use(cors({
 var apiRoutes = express.Router();
 apiRoutes.use(function (req, res, next) {
     // 拿取token 数据 按照自己传递方式写
-    var token = req.body.token || req.query.token || req.headers['token'];
+    var token = req.body.token || req.query.token || req.headers["token"];
     var requestUrl = req.originalUrl;
     if(requestUrl.indexOf("login") != -1){
         next();
@@ -41,7 +41,7 @@ apiRoutes.use(function (req, res, next) {
             // 解码 token (验证 secret 和检查有效期（exp）)
             jwt.validate(token, res,next, function (err, decoded) {
                 if (err) {
-                    return res.json({ success: false, message: '无效的token.' });
+                    return res.json({ success: false, message: "无效的token." });
                 } else {
                     // 如果验证通过，在req中写入解密结果
                     req.decoded = decoded;
@@ -53,7 +53,7 @@ apiRoutes.use(function (req, res, next) {
             // 没有拿到token 返回错误 
             return res.status(403).send({
                 success: false,
-                message: '没有找到token.'
+                message: "没有找到token."
             });
         }
     }
@@ -63,9 +63,9 @@ apiRoutes.use(function (req, res, next) {
 //根据不同的功能 划分模块 (动态)
 app.use(apiRoutes);
 app.use(bodyParser.json());
-app.use('/admin/article', require('./router/articleRouter'));
-app.use('/admin/user', require('./router/userRouter'));
+app.use("/admin/article", require("./router/articleRouter"));
+app.use("/admin/user", require("./router/userRouter"));
 
 app.listen(9090, (res, req) => {
-    console.log('Node app start at port 9090');
+    console.log("Node app start at port 9090");
 });
