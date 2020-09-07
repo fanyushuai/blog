@@ -9,6 +9,16 @@ import elementUI from 'element-ui'
 import "element-ui/lib/theme-chalk/index.css"
 import moment from 'moment'
 import store from "./util/store"
+import hljs from 'highlight.js'
+import 'highlight.js/styles/darcula.css' //样式文件
+
+//代码高亮
+Vue.directive('highlight',function (el) {
+  let blocks = el.querySelectorAll('pre code');
+  blocks.forEach((block)=>{
+    hljs.highlightBlock(block)
+  })
+})
 
 //定义一个全局过滤器实现日期格式化
 Vue.filter('datrfmt',function (input) {//当input为时间戳时，需转为Number类型
@@ -22,6 +32,7 @@ Vue.prototype.$store = store;
 Vue.config.productionTip = false
 
 Vue.use(elementUI)
+Vue.use(hljs);
 
 /* eslint-disable no-new */
 new Vue({

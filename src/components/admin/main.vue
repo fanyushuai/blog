@@ -2,9 +2,7 @@
     <el-row class="container">
         <el-col :span="24" class="header">
             <el-col :span="5" class="logo" :class="'logo-width'">
-                <a href="/" style="text-decoration:none;color:#FFFFFF;">
-                    后台管理系统
-                </a>
+                后台管理系统
             </el-col>
             <el-col :span="2">
                 <div class="tools" @click.prevent="collapse">
@@ -14,7 +12,7 @@
             <el-col :span="10" class="userinfo">
                 <el-dropdown trigger="hover" @command="handleCommand">
                     <span class="el-dropdown-link userinfo-inner">
-                        你好：{{this.$store.state.user.username}}
+                        你好：{{this.$store.state.user.username}}<img :src="this.$store.state.user.headimg" alt="" onclick="alert(123)"/>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="home">首页</el-dropdown-item>
@@ -93,8 +91,7 @@
         return {
             sysName: '后台管理系统',
             menuData: [],
-            collapsed: false,
-            username:""
+            collapsed: false
         }
     }
 

@@ -4,7 +4,9 @@ const bodyParser = require("body-parser");
 const expressSession = require("express-session")
 const app = express();
 const cors = require("cors");
-const jwt = require("./util/jwtUtil")
+const jwt = require("./util/jwtUtil");
+
+const excludeUrl = ["/admin/article/findOne","/admin/user/login"];
 
 //使用session
 app.use(cookieParser());true
@@ -34,7 +36,7 @@ apiRoutes.use(function (req, res, next) {
     // 拿取token 数据 按照自己传递方式写
     var token = req.body.token || req.query.token || req.headers["token"];
     var requestUrl = req.originalUrl;
-    if(requestUrl.indexOf("login") != -1){
+    if(excludeUrl.includes(requestUrl)){
         next();
     }else{
         if (token) {

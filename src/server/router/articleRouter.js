@@ -80,7 +80,7 @@ router.post("/findOne",function(req,res){
   var id = req.body.id
   Article.findById({"_id": id}, function (err, data) {
     res.send(data._doc);
-  }).populate({path: 'createUser', select: { username: 1 }, options: {sort: { username: -1 }}});
+  }).populate({path: 'createUser', select: { username: 1,headimg:1,autograph:1 }, options: {sort: { username: -1 }}});
 });
 
 

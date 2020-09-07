@@ -87,7 +87,7 @@ router.post("/login",function(req, res){
             if(password != data._doc.password){
                 results = {"success":false,"message":"用户名或者密码错误"};
             }else{
-                results = {"success":true,"message":"登录成功",token:token,"user":{"username":username}}; 
+                results = {"success":true,"message":"登录成功",token:token,"user":{"username":username,"headimg":data._doc.headimg}}; 
                 req.session.user = data._doc
             }
         }else{

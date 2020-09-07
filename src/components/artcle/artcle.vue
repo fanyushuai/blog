@@ -1,24 +1,19 @@
 <template>
 <el-container>
-  <el-header>Header</el-header>
+  <el-header><h2>{{blog.title}}</h2>分类：{{blog.category}} 作者：{{blog.createUser.username}}</el-header>
   <el-container>
-    <el-aside width="200px">Aside</el-aside>
+    <el-aside width="200px">
+      <img :src="blog.createUser.headimg" style="width:40px;height:40px"/>
+      <br/>
+      <label>{{blog.createUser.autograph}}</label>
+    </el-aside>
     <el-container>
       <el-main>
         <el-container direction="vertical" class="detail-container">
           <el-row type="flex" justify="center" >
             <el-col>
-              <div class="detail-blog-box">
-                <h2>{{blog.title}}</h2>
-                <article class="detail-blog-article" v-html="blog.content"></article>
-                <el-row class="detail-inscribe" type="flex" align="bottom" justify="start">
-                  <el-col :span="8" class="el-col-category" >
-                    <ul>分类：
-                      <li>{{blog.category}}</li>
-                    </ul>
-                  </el-col>
-                  <el-col :span="4">作者：{{blog.createUser.username}}</el-col>
-                </el-row>
+              <div id="codeView" v-highlight>
+                <pre><code v-html="blog.content"></code></pre>
               </div>
             </el-col>
           </el-row>
@@ -30,6 +25,7 @@
 </el-container>
 </template>   
 <script>  
+import hljs from "highlight.js";
 export default {
   name:"",
   data() {
@@ -60,7 +56,14 @@ export default {
 }
 </script>
 <style>
-   .el-header, .el-footer {
+   .el-header {
+    background-color: #B3C0D1;
+    color: #333;
+    text-align: center;
+    line-height: 5px;
+  }
+
+  .el-footer {
     background-color: #B3C0D1;
     color: #333;
     text-align: center;
