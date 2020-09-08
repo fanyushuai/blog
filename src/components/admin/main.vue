@@ -12,7 +12,7 @@
             <el-col :span="10" class="userinfo">
                 <el-dropdown trigger="hover" @command="handleCommand">
                     <span class="el-dropdown-link userinfo-inner">
-                        你好：{{this.$store.state.user.username}}<img :src="this.$store.state.user.headimg" alt="" onclick="alert(123)"/>
+                        你好：{{this.$store.state.user.username}}<img :src="this.$store.state.user.headimg" alt=""/>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="home">首页</el-dropdown-item>

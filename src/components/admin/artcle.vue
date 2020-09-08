@@ -19,6 +19,7 @@
           <el-button size="mini" @click="edit()">新增</el-button>
         </template>
         <template slot-scope="scope">
+          <el-button size="mini" @click="detail(scope.row)">查看</el-button>
           <el-button size="mini" @click="edit(scope.$index, scope.row)">修改</el-button>
           <el-popover
             placement="top"
@@ -176,6 +177,12 @@ export default {
             return response;
           }
         });
+    },
+    detail(row){
+      let newpage = this.$router.resolve({ 
+            path: "/artcle/"+row._id 
+      })
+      window.open(newpage.href, '_blank');
     },
     edit(index, row) {
       if (row) {

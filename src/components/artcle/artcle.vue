@@ -9,15 +9,13 @@
     </el-aside>
     <el-container>
       <el-main>
-        <el-container direction="vertical" class="detail-container">
-          <el-row type="flex" justify="center" >
-            <el-col>
-              <div id="codeView" v-highlight>
-                <pre><code v-html="blog.content"></code></pre>
-              </div>
-            </el-col>
-          </el-row>
-        </el-container>
+        <template>
+          <el-container direction="vertical" class="detail-container">
+            <el-row type="flex" justify="center" >
+              <code class="hljs" v-html="blog.content"></code>
+            </el-row>
+          </el-container>
+        </template>
       </el-main>
       <el-footer>Footer</el-footer>
     </el-container>

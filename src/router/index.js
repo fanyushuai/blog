@@ -33,7 +33,7 @@ const router = new Router({
       ]
     },{
       path:"/artcle/:id",
-      name:"",
+      name:"文章详情",
       component:artcle
     }
   ]
